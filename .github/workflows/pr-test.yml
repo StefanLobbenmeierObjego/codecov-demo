@@ -29,5 +29,4 @@ jobs:
       - name: Upload Coverage Result
         uses: codecov/codecov-action@v3
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
           commit_parent: ${{ github.event.pull_request.base.sha }}
