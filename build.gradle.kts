@@ -5,6 +5,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.0"
 	kotlin("jvm") version "1.7.22"
 	kotlin("plugin.spring") version "1.7.22"
+	jacoco
 }
 
 group = "de.objego"
@@ -17,6 +18,8 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
+	implementation("org.springframework.boot:spring-boot-starter-web")
+
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
@@ -28,6 +31,14 @@ tasks.withType<KotlinCompile> {
 	}
 }
 
-tasks.withType<Test> {
-	useJUnitPlatform()
+tasks {
+	test {
+		useJUnitPlatform()
+		finalizedBy(jacocoTestReport)
+	}
+	jacocoTestReport {
+		dependsOn(test)
+
+		reports { xml.required.set(true) }
+	}
 }
