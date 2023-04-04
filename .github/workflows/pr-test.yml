@@ -14,11 +14,16 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
+
+      - name: Print branch information
+        run: git branch -av
 
       - name: echo github.event.pull_request.base.sha
         run: echo '${{ github.event.pull_request.base.sha }}'
