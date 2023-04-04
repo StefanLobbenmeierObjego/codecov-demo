@@ -25,19 +25,20 @@ jobs:
       - name: Print branch information
         run: git branch -av
 
+      - run: git rev-parse HEAD^
+
+      - name: Set the value
+        id: step_one
+        run: |
+          echo "FOO=$(git rev-parse HEAD^)" >> $GITHUB_ENV
+
+      - name: Use the value
+        id: step_two
+        run: |
+          echo "${{ env.FOO }}"
+
       - name: echo github.event.pull_request.base.sha
         run: echo '${{ github.event.pull_request.base.sha }}'
-
-      - name: Print commit SHAs v2
-        run: |
-          shaA=$(git rev-parse main)
-          shaD=$(git rev-parse HEAD)
-          shaB=$(git merge-base $shaD $shaA)
-          shaC=$(git rev-parse HEAD)
-          echo "Commit A: $shaA"
-          echo "Commit B: $shaB"
-          echo "Commit C: $shaC"
-          echo "Commit D: $shaD"
 
       - name: Dump GitHub context
         env:
@@ -53,4 +54,4 @@ jobs:
       - name: Upload Coverage Result
         uses: codecov/codecov-action@v3
         with:
-          commit_parent: ${{ github.event.pull_request.base.sha }}
+          commit_parent: ${{ env.FOO }}
