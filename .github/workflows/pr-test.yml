@@ -23,15 +23,16 @@ jobs:
       - name: echo github.event.pull_request.base.sha
         run: echo '${{ github.event.pull_request.base.sha }}'
 
-      - name: Print commit SHAs
+      - name: Print commit SHAs v2
         run: |
-          git fetch origin main
-          shaA=$(git rev-parse origin/main)
-          shaB=$(git rev-parse origin/main^)
+          shaA=$(git rev-parse main)
+          shaD=$(git rev-parse HEAD)
+          shaB=$(git merge-base $shaD $shaA)
           shaC=$(git rev-parse HEAD)
           echo "Commit A: $shaA"
           echo "Commit B: $shaB"
           echo "Commit C: $shaC"
+          echo "Commit D: $shaD"
 
       - name: Dump GitHub context
         env:
